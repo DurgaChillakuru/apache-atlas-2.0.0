@@ -29,6 +29,6 @@ ENV MANAGE_LOCAL_SOLR=true
 ENV MANAGE_EMBEDDED_CASSANDRA=false
 ENV MANAGE_LOCAL_ELASTICSEARCH=false
 
-COPY conf/atlas-application.properties /opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT/conf/atlas-application.properties
+COPY atlas-application.properties /opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT/conf/atlas-application.properties
 
 CMD ["/bin/bash", "-c", "/opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT/bin/atlas_start.py; tail -fF /apache-atlas-2.0.0/logs/application.log"]
