@@ -1,34 +1,52 @@
-ARG VERSION-2.0.0
-
 FROM ubuntu:18.04
-LABEL maintainer="dchillak@redhat.com"
+LABEL maintainer="cdurga1494@gmail.com"
 
-ENV ATLAS_HOME=/opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT
+ARG VERSION=2.0.0
 
-RUN apt-get update \
-    && apt-get -y upgrade \
-    && apt-get -y install apt-utils \
-    && apt-get -y install \
-    && apt-get -y install curl maven wget git python openjdk-8-jdk-headless
-
-RUN cd /tmp \
-    && git clone https://github.com/apache/atlas.git -b branch-2.0 \
-    && cd atlas \
-    && export MAVEN_OPTS="-Xms2g -Xmx2g" \
-    && export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
-    && mvn clean -DskipTests package -Pdist,embedded-hbase-solr \
-    && cd distro/target \
-    && mkdir /opt/apache-atlas-2.0 \
-    && tar -xzvf /tmp/atlas/distro/target/apache-atlas-2.1.0-SNAPSHOT-server.tar.gz -C /opt/apache-atlas-2.0 \
-    && sed '505,506d' $ATLAS_HOME/bin/atlas_config.py
-
-EXPOSE 21000
-
+ENV ATLAS_HOME=/opt/apache-atlas-${VERSION}/apache-atlas-${VERSION}
+ENV MAVEN_OPTS="-Xms2g -Xmx2g"
+ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 ENV MANAGE_LOCAL_HBASE=true
 ENV MANAGE_LOCAL_SOLR=true
 ENV MANAGE_EMBEDDED_CASSANDRA=false
 ENV MANAGE_LOCAL_ELASTICSEARCH=false
 
-COPY atlas-application.properties /opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT/conf/atlas-application.properties
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get -y install apt-utils \
+    && apt-get -y install \
+    && apt-get -y install curl maven wget git python openjdk-8-jdk-headless patch \
+    && cd /tmp \
+    && wget http://mirror.linux-ia64.org/apache/atlas/${VERSION}/apache-atlas-${VERSION}-sources.tar.gz \
+    && mkdir /tmp/atlas \
+    && tar --strip 1 -xzvf apache-atlas-${VERSION}-sources.tar.gz -C /tmp/atlas \
+    && rm apache-atlas-${VERSION}-sources.tar.gz \
+    && cd /tmp/atlas \
+    && sed -i 's/http:\/\/repo1.maven.org\/maven2/https:\/\/repo1.maven.org\/maven2/g' pom.xml \
+    && mvn clean -DskipTests package -Pdist,embedded-hbase-solr \
+    && cd /tmp/atlas/distro/target \
+    && mkdir /opt/apache-atlas-${VERSION} \		
+    && tar -xzvf /tmp/atlas/distro/target/apache-atlas-${VERSION}-server.tar.gz -C /opt/apache-atlas-${VERSION}/ \
+    && echo "after unzip /opt/apache-atlas-2.0.0 contents" \
+    && echo "------------------------------------------------------------" \
+    && ls /opt/apache-atlas-${VERSION} \
+    && rm -Rf /tmp/atlas \
+    && apt-get -y --purge remove \
+        maven \
+        git \
+    && apt-get clean
+    && sed '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
+    && mkdir -p ${ATLAS_HOME}/logs
 
-CMD ["/bin/bash", "-c", "/opt/apache-atlas-2.0/apache-atlas-2.1.0-SNAPSHOT-server/apache-atlas-2.1.0-SNAPSHOT/bin/atlas_start.py; tail -fF /apache-atlas-2.0.0/logs/application.log"]
+COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
+COPY atlas-application.properties ${ATLAS_HOME}/conf/atlas-application.properties
+
+RUN cd ${ATLAS_HOME}/bin \
+    && patch -b -f < atlas_start.py.patch \
+    && patch -b -f < atlas_config.py.patch
+
+EXPOSE 21000
+
+VOLUME ["/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/conf", "/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/logs"]
+
+CMD ["/bin/bash", "-c", "/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /opt/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
