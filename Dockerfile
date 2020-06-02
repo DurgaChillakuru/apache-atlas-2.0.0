@@ -34,7 +34,7 @@ RUN apt-get update \
     && apt-get -y --purge remove \
         maven \
         git \
-    && apt-get clean
+    && apt-get clean \
     && sed '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
     && mkdir -p ${ATLAS_HOME}/logs
 
