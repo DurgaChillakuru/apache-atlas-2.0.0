@@ -42,7 +42,6 @@ RUN apt-get update \
 
 COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
 COPY atlas-application.properties ${ATLAS_HOME}/conf/atlas-application.properties
-COPY Entrypoint.sh {ATLAS_HOME}/Entrypoint.sh
 
 RUN cd ${ATLAS_HOME}/bin \
     && patch -b -f < atlas_start.py.patch \
@@ -52,4 +51,4 @@ EXPOSE 21000
 
 VOLUME ["/home/apache-atlas-2.0.0/apache-atlas-2.0.0/conf", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs"]
 
-CMD ["/bin/bash", "-c", "chmod 755 /home/apache-atlas-2.0.0/apache-atlas-2.0.0/Entrypoint.sh && /home/apache-atlas-2.0.0/apache-atlas-2.0.0/atlas-entrypoint.sh", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
+CMD ["/bin/bash", "-c", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
