@@ -3,7 +3,7 @@ LABEL maintainer="cdurga1494@gmail.com"
 
 ARG VERSION=2.0.0
 
-ENV ATLAS_HOME=/opt/apache-atlas-${VERSION}/apache-atlas-${VERSION}
+ENV ATLAS_HOME=/home/apache-atlas-${VERSION}/apache-atlas-${VERSION}
 ENV MAVEN_OPTS="-Xms2g -Xmx2g"
 ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 ENV MANAGE_LOCAL_HBASE=true
@@ -27,11 +27,11 @@ RUN apt-get update \
     && git apply ./20.patch \
     && mvn clean -DskipTests package -Pdist,embedded-hbase-solr \
     && cd /tmp/atlas/distro/target \
-    && mkdir /opt/apache-atlas-${VERSION} \		
-    && tar -xzvf /tmp/atlas/distro/target/apache-atlas-${VERSION}-server.tar.gz -C /opt/apache-atlas-${VERSION}/ \
+    && mkdir /home/apache-atlas-${VERSION} \		
+    && tar -xzvf /tmp/atlas/distro/target/apache-atlas-${VERSION}-server.tar.gz -C /home/apache-atlas-${VERSION}/ \
     && echo "after unzip /opt/apache-atlas-2.0.0 contents" \
     && echo "------------------------------------------------------------" \
-    && ls /opt/apache-atlas-${VERSION} \
+    && ls /home/apache-atlas-${VERSION} \
     && rm -Rf /tmp/atlas \
     && apt-get -y --purge remove \
         maven \
@@ -50,6 +50,6 @@ RUN cd ${ATLAS_HOME}/bin \
 
 EXPOSE 21000
 
-VOLUME ["/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/conf", "/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/logs"]
+VOLUME ["/home/apache-atlas-2.0.0/apache-atlas-2.0.0/conf", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs"]
 
-CMD ["/bin/bash", "-c", "chmod 755 atlas-entrypoint.sh && ./atlas-entrypoint.sh", "/opt/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /opt/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
+CMD ["/bin/bash", "-c", "chmod 755 atlas-entrypoint.sh && ./atlas-entrypoint.sh", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
