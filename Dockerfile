@@ -52,4 +52,4 @@ EXPOSE 21000
 
 VOLUME ["/home/apache-atlas-2.0.0/apache-atlas-2.0.0/conf", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs"]
 
-CMD ["/bin/bash", "-c", "chmod 755 atlas-entrypoint.sh && ./atlas-entrypoint.sh", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
+CMD ["/bin/bash", "-c", "chmod 755 /home/apache-atlas-2.0.0/apache-atlas-2.0.0/Entrypoint.sh && /home/apache-atlas-2.0.0/apache-atlas-2.0.0/atlas-entrypoint.sh", "/home/apache-atlas-2.0.0/apache-atlas-2.0.0/bin/atlas_start.py; tail -fF /home/apache-atlas-2.0.0/apache-atlas-2.0.0/logs/application.log"]
