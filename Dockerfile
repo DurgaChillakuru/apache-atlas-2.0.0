@@ -23,6 +23,8 @@ RUN apt-get update \
     && rm apache-atlas-${VERSION}-sources.tar.gz \
     && cd /tmp/atlas \
     && sed -i 's/http:\/\/repo1.maven.org\/maven2/https:\/\/repo1.maven.org\/maven2/g' pom.xml \
+    && wget --no-check-certificate https://github.com/apache/atlas/pull/20.patch \
+    && git apply ./20.patch \
     && mvn clean -DskipTests package -Pdist,embedded-hbase-solr \
     && cd /tmp/atlas/distro/target \
     && mkdir /opt/apache-atlas-${VERSION} \		
