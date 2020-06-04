@@ -43,6 +43,8 @@ RUN apt-get update \
 COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
 COPY atlas-application.properties ${ATLAS_HOME}/conf/atlas-application.properties
 
+RUN chmod -R 777 /home/apache-atlas-${VERSION}/apache-atlas-${VERSION}
+
 RUN cd ${ATLAS_HOME}/bin \
     && patch -b -f < atlas_start.py.patch \
     && patch -b -f < atlas_config.py.patch
