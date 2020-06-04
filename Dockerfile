@@ -37,7 +37,7 @@ RUN apt-get update \
         maven \
         git \
     && apt-get clean \
-    && sed '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
+    && sed -i '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
     && mkdir -p ${ATLAS_HOME}/logs
 
 COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
