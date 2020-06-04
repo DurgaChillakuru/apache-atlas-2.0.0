@@ -38,7 +38,7 @@ RUN apt-get update \
         git \
     && apt-get clean \
     && sed -i '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
-    && sed -i '497s/.*/return 0.0.0.0/' ${ATLAS_HOME}/bin/atlas_config.py \
+    && sed -i '496 i host='0.0.0.0' ' ${ATLAS_HOME}/bin/atlas_config.py \
     && mkdir -p ${ATLAS_HOME}/logs
 
 COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
