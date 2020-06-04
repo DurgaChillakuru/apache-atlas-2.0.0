@@ -493,8 +493,9 @@ def get_atlas_url_port(confdir):
 def get_atlas_url_host(confdir):
     confdir = os.path.join(confdir, CONF_FILE)
     host = getConfigWithDefault(confdir, ATLAS_SERVER_BIND_ADDRESS, DEFAULT_ATLAS_SERVER_HOST)
-    if (host == '0.0.0.0'):
-        host = DEFAULT_ATLAS_SERVER_HOST
+    print "DEFAULT_ATLAS_SERVER_HOST %s" % DEFAULT_ATLAS_SERVER_HOST
+    print "ATLAS_SERVER_BIND_ADDRESS %s" % ATLAS_SERVER_BIND_ADDRESS
+    print "confdir %s" % confdir
     print "starting atlas on host %s" % host
     return host
 
