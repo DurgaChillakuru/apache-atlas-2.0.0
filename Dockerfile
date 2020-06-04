@@ -38,9 +38,9 @@ RUN apt-get update \
         git \
     && apt-get clean \
     && sed -i '496,497d' ${ATLAS_HOME}/bin/atlas_config.py \
-    && sed -i '496 i 'print "DEFAULT_ATLAS_SERVER_HOST %s" % DEFAULT_ATLAS_SERVER_HOST ' ${ATLAS_HOME}/bin/atlas_config.py \
-    && sed -i '496 i 'print "ATLAS_SERVER_BIND_ADDRESS %s" % ATLAS_SERVER_BIND_ADDRESS ' ${ATLAS_HOME}/bin/atlas_config.py \
-    && sed -i '496 i 'print "confdir %s" % confdir ' ${ATLAS_HOME}/bin/atlas_config.py \
+    && sed -i '496 i print "DEFAULT_ATLAS_SERVER_HOST %s" % DEFAULT_ATLAS_SERVER_HOST ' ${ATLAS_HOME}/bin/atlas_config.py \
+    && sed -i '496 i print "ATLAS_SERVER_BIND_ADDRESS %s" % ATLAS_SERVER_BIND_ADDRESS ' ${ATLAS_HOME}/bin/atlas_config.py \
+    && sed -i '496 i print "confdir %s" % confdir ' ${ATLAS_HOME}/bin/atlas_config.py \
     && mkdir -p ${ATLAS_HOME}/logs
 
 COPY atlas_start.py.patch atlas_config.py.patch ${ATLAS_HOME}/bin/
